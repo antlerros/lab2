@@ -1,21 +1,20 @@
 <html>
-<meta charset="utf-8">
-<style>
-.line {
-  fill: none;
-  stroke: #000;
-  stroke-width: 1.5px;
-}
-</style>
-
 <head>
-    <script src="https://socket.io/socket.io.js"></script>
-    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://d3js.org/d3.v4.js"></script>
+    
 </head>
 <body>
+    <style>
+        .line {
+            fill: none;
+            stroke: #000;
+            stroke-width: 1.5px;
+        }
+    </style>
     <svg width="960" height="500"></svg>
     <script>
-        // var socket = io.connect();
+        var socket = io.connect();
         var n = 40,
             random = d3.randomNormal(0, .2),
             data = d3.range(n).map(random);
@@ -55,19 +54,21 @@
             .ease(d3.easeLinear)
             .on("start", tick);
         function tick() {
-        // Push a new data point onto the back.
-        data.push(random());
-        // Redraw the line.
-        d3.select(this)
-            .attr("d", line)
-            .attr("transform", null);
-        // Slide it to the left.
-        d3.active(this)
-            .attr("transform", "translate(" + x(-1) + ",0)")
-            .transition()
-            .on("start", tick);
-        // Pop the old data point off the front.
-        data.shift();
+            // data.push(random());
+            socket.on('volume', function(newData) {
+                data.push(newData.volume);
+            })
+            // Redraw the line.
+            d3.select(this)
+                .attr("d", line)
+                .attr("transform", null);
+            // Slide it to the left.
+            d3.active(this)
+                .attr("transform", "translate(" + x(-1) + ",0)")
+                .transition()
+                .on("start", tick);
+            // Pop the old data point off the front.
+            data.shift();
         }
     </script>
 </body>

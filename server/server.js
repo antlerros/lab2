@@ -36,4 +36,11 @@ var server = http.createServer(function(request, response){
 });
 
 server.listen(8001);
-io.listen(server);
+var serv_io = io.listen(server);
+
+serv_io.sockets.on('connection', function(socket) {
+  setInterval(function() {
+    //TODO: push the new data here.
+    socket.emit('volume', {'volume': 0.5});
+  }, 500);
+});
