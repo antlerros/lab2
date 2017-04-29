@@ -2,9 +2,13 @@ var http = require('http');
 var url = require('url');
 var io = require('socket.io');
 var fs = require('fs');
+var tessel = require('tessel');
+var ambientlib = require('ambient-attx4');
+
+
+tessel.led[2].off();		
 
 var server = http.createServer(function(request, response){
-  console.log('Connection');
 
   var path = url.parse(request.url).pathname;
   switch(path) {
@@ -36,11 +40,32 @@ var server = http.createServer(function(request, response){
 });
 
 server.listen(8001);
+console.log('running at 192.168.1.101:8001...');
 var serv_io = io.listen(server);
 
-serv_io.sockets.on('connection', function(socket) {
-  setInterval(function() {
-    //TODO: push the new data here.
-    socket.emit('volume', {'volume': 0.5});
-  }, 500);
+
+var ambient = ambientlib.use(tessel.port['A']);
+ambient.on("ready", function(){
+	ambient.setSoundTrigger(0.018);
+	console.log('ready');
+	serv_io.sockets.on('connection', function(socket){
+		console.log('connected');
+		ambient.on("sound-trigger",function(){
+			tessel.led[2].toggle();
+			setTimeout(function(){
+				tessel.led[2].toggle();
+			},200);
+			
+
+			ambient.getSoundLevel( function(err, sounddata){
+				if(err) throw err;
+				console.log(sounddata.toFixed(8));
+				setInterval(function(){
+					socket.emit('volume', {'volume': sounddata.toFixed(8)});
+				}, 500);
+				//socket.emit('volume', {'volume': sounddata.toFixed(8)});
+			});
+		});
+
+	});
 });
