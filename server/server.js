@@ -46,25 +46,25 @@ var serv_io = io.listen(server);
 
 var ambient = ambientlib.use(tessel.port['A']);
 ambient.on("ready", function(){
-	ambient.setSoundTrigger(0.018);
+	ambient.setSoundTrigger(0.01);
 	console.log('ready');
 	serv_io.sockets.on('connection', function(socket){
 		console.log('connected');
-		ambient.on("sound-trigger",function(){
-			tessel.led[2].toggle();
-			setTimeout(function(){
-				tessel.led[2].toggle();
-			},200);
+
+		ambient.on("sound-trigger",function(sounddata){
 			
 
-			ambient.getSoundLevel( function(err, sounddata){
-				if(err) throw err;
-				console.log(sounddata.toFixed(8));
-				setInterval(function(){
-					socket.emit('volume', {'volume': sounddata.toFixed(8)});
-				}, 500);
-				//socket.emit('volume', {'volume': sounddata.toFixed(8)});
-			});
+			console.log(sounddata.toFixed(8));
+			setInterval(function(){
+				socket.emit('volume', {'volume': sounddata.toFixed(8)});
+			}, 500);
+			
+			if(sounddata > 0.18){
+				tessel.led[2].toggle();
+				setTimeout(function(){
+					tessel.led[2].toggle();
+				},200);
+			}
 		});
 
 	});
