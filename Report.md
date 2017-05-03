@@ -27,6 +27,8 @@
 
 在tessel2上架一個web server，利用socket的方式來傳遞讀取的data給connect到的client並visualize。
 
+### Server
+
 以下為tessel讀取音量部份的程式碼：
 
 - 我們將server開在tessel ap的ip address: 192.168.1.101，並利用socket.io 跟client傳資料。
