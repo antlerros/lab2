@@ -16,7 +16,7 @@
     <script>
         var socket = io.connect();
         var n = 40,
-            random = d3.randomNormal(0, .2),
+            random = d3.randomNormal(0, 0.),
             data = d3.range(n).map(random);
         var svg = d3.select("svg"),
             margin = {top: 20, right: 20, bottom: 20, left: 40},
@@ -27,7 +27,7 @@
             .domain([0, n - 1])
             .range([0, width]);
         var y = d3.scaleLinear()
-            .domain([-0.3, 0.3])
+            .domain([-1, 1])
             .range([height, 0]);
         var line = d3.line()
             .x(function(d, i) { return x(i); })
@@ -46,18 +46,17 @@
             .call(d3.axisLeft(y));
         g.append("g")
             .attr("clip-path", "url(#clip)")
-        .append("path")
+            .append("path")
             .datum(data)
             .attr("class", "line")
-        .transition()
+            .transition()
             .duration(500)
             .ease(d3.easeLinear)
             .on("start", tick);
+        socket.on('volume', function(newData) {
+            data.push(newData.volume);
+        })
         function tick() {
-            // data.push(random());
-            socket.on('volume', function(newData) {
-                data.push(newData.volume);
-            })
             // Redraw the line.
             d3.select(this)
                 .attr("d", line)
