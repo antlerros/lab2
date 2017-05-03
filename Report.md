@@ -56,4 +56,17 @@
 
 ## Output
 
-我們將閥值設定在0.18，大約是一次拍手所發出的音量。當偵測到的data超越閥值時，tessel上的led燈會短暫的閃爍來告知。
+- 我們將閥值設定在0.18，大約是一次拍手所發出的音量。當偵測到的data超越閥值時，tessel上的led燈會短暫的閃爍來告知。
+
+	```
+	ambient.on("sound-trigger",function(sounddata){
+		...
+					
+		if(sounddata > 0.18){
+			tessel.led[2].toggle();
+			setTimeout(function(){
+				tessel.led[2].toggle();
+			},200);
+		}
+	});
+	```
