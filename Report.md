@@ -7,7 +7,7 @@
 - 進入 server directory
 
 	```
-	./server
+	cd ./server
 	```
 - 開啟tessel2的access point
 

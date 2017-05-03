@@ -1,12 +1,20 @@
 # Lab2
+
 ## Steps
 
+- 進入 server directory
+
+	```
+	cd ./server
+	```
 - 開啟tessel2的access point
+
 	```
 	t2 ap -n <access_point_name>
 	```
 - 將電腦連上此access point
 - 將server deploy
+
 	```
 	t2 run server.js
 	```
