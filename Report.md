@@ -92,8 +92,8 @@ Visualization的部分是用D3來畫圖。先在 `display.html` 加入一個svg�
 
 	```
 	var line = d3.line()
-	    			.x(function(d, i) { return x(i); })
-	    			.y(function(d, i) { return y(d); });
+			.x(function(d, i) { return x(i); })
+			.y(function(d, i) { return y(d); });
 	```
 - 加入`axis x`及`axis y`並設定位置到bottom及left。
 
@@ -112,7 +112,7 @@ Visualization的部分是用D3來畫圖。先在 `display.html` 加入一個svg�
 	```
 	socket.on('volume', function(newData) {
 	            data.push(newData.volume);
-				})
+	})
 	```
 - 重畫line，並用`shift()`將就的data移除。
 
