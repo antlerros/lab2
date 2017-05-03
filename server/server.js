@@ -59,7 +59,7 @@ ambient.on("ready", function(){
 				socket.emit('volume', {'volume': sounddata.toFixed(8)});
 			}, 500);
 			
-			if(sounddata > 0.18){
+			if(sounddata > 0.1){
 				tessel.led[2].toggle();
 				setTimeout(function(){
 					tessel.led[2].toggle();
