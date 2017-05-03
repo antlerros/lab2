@@ -1,5 +1,4 @@
 # Lab2
-
 ## Steps
 
 - 開啟tessel2的access point
